@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Is he working?!</title>
+    <link href="css/normalize.css" rel="stylesheet" type="text/css"/>
+    <link href="css/datepicker.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#datepicker').datepicker({
+                inline: true,
+                nextText: '&rarr;',
+                prevText: '&larr;',
+                showOtherMonths: true,
+                dateFormat: 'dd MM yy',
+                dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                showOn: "button",
+                buttonImage: "img/calendar-blue.png",
+                buttonImageOnly: true
+            });
+            $(document).tooltip({
+                track: true
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2> Is he working?!</h2>
+
+    <div id="datecontainer"><input type="text" placeholder="Select Date..." id="datepicker" title="Select a date!"></div>
+</body>
+</html>

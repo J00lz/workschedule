@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+Any code listed within here is property of Shawn Ramsey/J00lz.
+Use of this code requires mention of the original author!
+And while I realize you probably won't, don't be a dick...
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/application.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href='css/fullcalendar.css' rel='stylesheet' />
+        <link href='css/fullcalendar.print.css' rel='stylesheet' media='print' />
+        <script src='js/moment.min.js'></script>
+        <script src='lib/jquery.min.js'></script>
+        <script src='lib/jquery-ui.custom.min.js'></script>
+        <script src='js/fullcalendar.js'></script>
+
+        
+        <script>        
+ 	$(document).ready(function() {
+
+
+		/* initialize the external events
+		-----------------------------------------------------------------*/
+
+		$('#external-events .external-event').each(function() {
+
+			// store data so the calendar knows to render an event upon drop
+			$(this).data('event', {
+				title: $.trim($(this).text()), // use the element's text as the event title
+				stick: true // maintain when user navigates (see docs on the renderEvent method)
+			});
+
+			// make the event draggable using jQuery UI
+			$(this).draggable({
+				zIndex: 999,
+				revert: true,      // will cause the event to go back to its
+				revertDuration: 0  //  original position after the drag
+			});
+
+		});
+
+
+		/* initialize the calendar
+		-----------------------------------------------------------------*/
+
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			editable: true,
+			droppable: true, // this allows things to be dropped onto the calendar
+			drop: function() {
+				// is the "remove after drop" checkbox checked?
+				if ($('#drop-remove').is(':checked')) {
+					// if so, remove the element from the "Draggable Events" list
+					$(this).remove();
+				}
+			}
+		});
+
+
+	});
+
+</script>
+      
+    </head>
+    <body>
+        <div class="container-fluid padded">
+            <div class="row-fluid">
+                <div class="span3" id='external-events'>
+                    <div class="box">
+                        <div class="box-header"><span class="title">Draggable events</span></div>
+                        <div class="box-content">
+                            <div class="nav-menu">
+                                <ul class="nav nav-list">
+
+                                    <li><a class='external-event'>My Event 1</a></li>
+
+                                    <li><a class='external-event'>My Event 2</a></li>
+
+                                    <li><a class='external-event'>My Event 3</a></li>
+
+                                    <li><a class='external-event'>My Event 4</a></li>
+
+                                    <li><a class='external-event'>My Event 5</a></li>
+
+                                    <li class="hidden-option">
+                                        <a id="add-event" class="flat" href="#"><i class="icon-plus"></i>Create event</a>
+                                    </li>
+                                    <li style="padding: 10px 0">
+                                        <div class="clearfix">
+                                            <div class="pull-left">
+                                                remove after drop
+                                            </div>
+                                            <div class="pull-right" style="margin-right: 2px;">
+                                                <input type='checkbox' id='drop-remove' class="checky"/>
+                                                <label for='drop-remove' class="checky"><span></span></label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="span9">
+                    <div class="box">
+                        <div class="box-header"><span class="title">Full calendar</span></div>
+                        <div class="box-content">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</body>
+</html>

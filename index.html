@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Is he working?!</title>
+        <link rel='stylesheet' href='css/cupertino/jquery-ui.min.css' />
+        <link href="css/normalize.css" rel="stylesheet" type="text/css"/>
+        <link href="css/datepicker.css" rel="stylesheet" type="text/css"/>
+        <link href="css/fullcalendar.css" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.3/fotorama.css" rel="stylesheet">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.3/fotorama.js"></script>
+        <script src='js/moment.js'></script>
+        <script src='js/fullcalendar.js'></script>
+        <script type="text/javascript">
+            $(function () {
+                $('#datepicker').datepicker({
+                    inline: true,
+                    nextText: '&rarr;',
+                    prevText: '&larr;',
+                    showOtherMonths: true,
+                    dateFormat: 'MM dd yy',
+                    dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    showOn: "button",
+                    buttonImage: "img/calendar-blue.png",
+                    buttonImageOnly: true,
+                    onSelect: function (date) {
+                        console.log(date);
+
+                        $.post("check.php", {date: date})
+                                .done(function (date) {
+                                    $('#response').html(date);
+                                });
+                    }
+                });
+            });
+            $(function () {
+                $("#dialog").dialog();
+            });
+            $(document).ready(function () {
+
+                // page is now ready, initialize the calendar...
+                $('#calendar').fullCalendar({
+                    theme: true,
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay'
+                    },
+                    editable: false,
+                    default: true,
+                    events: 'getDates.php',
+                    color: 'yellow',
+                    selectable: true,
+                    selectHelper: true,
+                    select: function (start, end, allDay, jsEvent) {
+                        var title = prompt('What are we naming this?:');
+                        if (title) {
+                            $('#calendar').fullCalendar('renderEvent',
+                                    {
+                                        title: title,
+                                        start: start,
+                                        end: end,
+                                        allDay: allDay
+                                    },
+                            false // make the event "stick"
+                                    );
+                            //var startDate = formatDate(start);
+                            //var endDate = formatDate(end);
+                            /**
+                             * ajax call to store event in DB
+                             */
+   var start = $.fullCalendar.formatDate(start, "yyyy-MM-dd HH:mm:ss");
+   var end = $.fullCalendar.formatDate(end, "yyyy-MM-dd HH:mm:ss");
+            $.ajax({
+   url: 'http://www.getrelationship.me/workschedule/addEvent.php?action=add',
+   data: 'title='+ title+'&start='+ start +'&end='+ end ,
+   type: "POST",
+   success: function(json) {
+   alert('Added Successfully');
+   }
+   });
+                        }
+                        $('#calendar').fullCalendar('unselect');
+                    }
+                })
+            });
+        </script>
+        <style>
+
+            body {
+                margin: 40px 10px;
+                padding: 0;
+                font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+                font-size: 14px;
+            }
+
+            #calendar {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+        </style>
+    </head>
+    <body>
+        <!--<h2> Is he working?!</h2>-->
+        <div class="container">
+
+            <div id="datecontainer"><input type="text" class="form-control" placeholder="Select Shawn's Date..." id="datepicker" title="Select a date!"></div>
+            <div class ="span4" id="couplepic">
+                <span id="response"> Let's find out shall we?!</span>
+                <div id="couplepic" class="fotorama">
+                    <img src="img/couplepics/shawnmarci.JPG" alt="SHAWN N MARZZZZ WAS HERE">
+                    <img src="img/couplepics/shawnmarci1.png" alt="SHAWN N MARZZZZ WAS HERE">
+                    <img src="img/couplepics/shawnmarci2.JPG" alt="SHAWN N MARZZZZ WAS HERE">
+                    <img src="img/couplepics/shawnmarci3.JPG" alt="SHAWN N MARZZZZ WAS HERE">
+                </div>
+
+
+            </div>
+
+        </div>
+        NOT WORKING YET... THIS IS 1 day off!
+        <div id='calendar'></div>
+    </body>
+</html>
